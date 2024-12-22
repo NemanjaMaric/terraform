@@ -8,8 +8,7 @@ variables:
   terraformVersion: '1.5.0'  # Change to your desired Terraform version
 
 steps:
-  steps:
-    - task: TerraformInstaller@1
-      displayName: install
-      inputs:
-        terraformVersion: 'latest'
+  - task: TerraformInstaller@1
+    displayName: install
+    inputs:
+      terraformVersion: 'latest'
