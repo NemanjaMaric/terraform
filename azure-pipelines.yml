@@ -1,0 +1,58 @@
+trigger:
+  - main  # or the branch you want to trigger the pipeline from
+
+pool:
+  vmImage: 'ubuntu-latest'  # The agent to run the pipeline on
+
+variables:
+  TF_VERSION: '1.5.0'  # Set the version of Terraform you want to use
+  TF_WORKSPACE: 'default'  # Set the workspace, default is usually fine
+  ARM_CLIENT_ID: $(azureServicePrincipal.clientId)  # Azure Service Principal details
+  ARM_CLIENT_SECRET: $(azureServicePrincipal.clientSecret)
+  ARM_SUBSCRIPTION_ID: $(azureServicePrincipal.subscriptionId)
+  ARM_TENANT_ID: $(azureServicePrincipal.tenantId)
+
+stages:
+  - stage: Terraform
+    jobs:
+      - job: TerraformJob
+        steps:
+
+          # Step 1: Install Terraform
+          - task: UseTerraform@0
+            inputs:
+              version: $(TF_VERSION)
+
+          # Step 2: Checkout the repo
+          - checkout: self
+
+          # Step 3: Set up Azure Service Principal authentication
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: '$(azureServicePrincipal)'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                echo "Setting up Azure credentials for Terraform..."
+                terraform init
+
+          # Step 4: Validate Terraform code
+          - script: |
+              terraform validate
+            displayName: 'Validate Terraform code'
+
+          # Step 5: Initialize Terraform
+          - script: |
+              terraform init -input=false
+            displayName: 'Initialize Terraform'
+
+          # Step 6: Plan Terraform deployment
+          - script: |
+              terraform plan -out=tfplan -input=false
+            displayName: 'Terraform Plan'
+
+          # Step 7: Apply Terraform deployment
+          - script: |
+              terraform apply -input=false tfplan
+            displayName: 'Terraform Apply'
+            condition: succeededOrFailed()  # Allow apply to run even if plan fails (optional)
