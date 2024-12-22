@@ -1,5 +1,5 @@
 trigger:
-  - main  # or the branch you want to trigger the pipeline from
+  - none
 
 pool:
   vmImage: 'ubuntu-latest'  # The agent to run the pipeline on
