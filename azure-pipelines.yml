@@ -7,10 +7,6 @@ pool:
 variables:
   TF_VERSION: '1.5.0'  # Set the version of Terraform you want to use
   TF_WORKSPACE: 'default'  # Set the workspace, default is usually fine
-  ARM_CLIENT_ID: $(azureServicePrincipal.clientId)  # Azure Service Principal details
-  ARM_CLIENT_SECRET: $(azureServicePrincipal.clientSecret)
-  ARM_SUBSCRIPTION_ID: $(azureServicePrincipal.subscriptionId)
-  ARM_TENANT_ID: $(azureServicePrincipal.tenantId)
 
 stages:
   - stage: Terraform
