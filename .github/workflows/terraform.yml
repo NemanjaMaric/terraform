@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   terraform:
-    name: 'Terraform Apply'
+    name: 'Create infrastructure on Azure via Terraform'
     runs-on: ubuntu-latest
 
     steps:
