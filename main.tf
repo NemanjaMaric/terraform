@@ -13,3 +13,9 @@ provider "azurerm" {
 
   features {}
 }
+
+module "linux_vm" {
+  source = "./modules/linux_vm"
+
+  vm_name = "my-custom-linux-vm"
+}
