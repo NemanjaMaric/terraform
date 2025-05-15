@@ -13,3 +13,9 @@ provider "azurerm" {
 
   features {}
 }
+
+module "linux-vm" {
+  source = "./modules/linux-vm"
+
+  vm-name="Nemanjas VM"
+}
