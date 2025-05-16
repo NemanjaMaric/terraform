@@ -13,9 +13,3 @@ provider "azurerm" {
 
   features {}
 }
-
-module "linux_vm" {
-  source = "./modules/linux_vm"
-
-  vm_name="pd-linux-vm"
-}
